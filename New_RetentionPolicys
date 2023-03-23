@@ -1,0 +1,62 @@
+Install-Module ExchangeOnlineManagement
+Import-Module ExchangeOnlineManagement
+Connect-IPPSSession -UserPrincipalName "Joakim.ferdinandsson.ext@ateaumea.onmicrosoft.com" -CommandName "New-RetentionCompliancePolicy,New-RetentionComplianceRule"
+
+
+
+# Change -ExchangeLocation and -OneDriveLocation variables based on Customer
+# Create Combined Variables
+$combinedname = "HA-BaselinePolicy V3"
+$combinednamerule = "HA-BaselinePolicy Rule V3"
+$combineddescription = "Managed Workplace Baseline Retention Policy Set for 5 years"
+$ExchangeLocation = "Modern.workplace@ateaumea.se"
+$OneDriveLocation = "https://ateaumea-my.sharepoint.com/personal/modern_workplace_ateaumea_se"
+
+
+
+# Try if get command returns anything
+try {
+    Install-Module ExchangeOnlineManagement
+    Import-Module ExchangeOnlineManagement
+    Connect-IPPSSession -UserPrincipalName "Joakim.ferdinandsson.ext@ateaumea.onmicrosoft.com"
+    $GetBaselinePolicy = Get-RetentionCompliancePolicy -Identity "$combinedname"
+
+}
+catch {
+    Write-Host "An error occurred:"
+    Write-Host $_
+    Throw "Error Occured, exiting script"
+}
+
+# Creating Baseline Policy
+try {
+    
+    if ($GetBaselinePolicy) {
+    
+        Write-Output "HA-BaselinePolicy Exists"
+
+    } else { 
+        Connect-IPPSSession -UserPrincipalName "Joakim.ferdinandsson.ext@ateaumea.onmicrosoft.com" -CommandName "New-RetentionCompliancePolicy,New-RetentionComplianceRule"
+        
+            $combinedpolicy = New-RetentionCompliancePolicy `
+                -Name $combinedname `
+                -Comment $combineddescription `
+                -ExchangeLocation "$ExchangeLocation" `
+                -OneDriveLocation "$OneDriveLocation" `
+                -Enabled $false
+
+            New-RetentionComplianceRule `
+                -Name $combinednamerule `
+                -Policy $combinedpolicy.Id `
+                -ContentMatchQuery None `
+                -RetentionDuration 1825 `
+                -RetentionComplianceAction Keep `
+                -ExpirationDateOption ModificationAgeInDays
+        
+        Disconnect-ExchangeOnline -Confirm:$false
+}}
+catch {
+    Write-Error "Error occured. $_"
+    Throw 
+}
+

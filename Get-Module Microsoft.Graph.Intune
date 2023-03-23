@@ -1,0 +1,76 @@
+Get-Module Microsoft.Graph.Intune
+Import-Module Microsoft.Graph.Intune
+Connect-MSGraph
+
+function Get-GraphAuthToken {
+    param (
+        [Parameter(Mandatory=$True)][ValidateNotNullOrEmpty()][String]$App_Id,
+        [Parameter(Mandatory=$True)][ValidateNotNullOrEmpty()][String]$App_secret,
+        # Validate tenantdomain name
+        [Parameter(Mandatory=$True)][ValidateScript({
+            if($_ -like "*.onmicrosoft.com"){
+                $True
+            } Else {
+                Throw "$_ is an invalid domainname, please supply a domain name using .onmicrosoft.com."
+            }
+        })][ValidateNotNullOrEmpty()][String]$TenantDomain
+    )
+    # Body used to get token for calls
+    Write-Verbose -Message "INFO: Building JSON body."
+    Try {
+        $body = @{
+            client_id     = $App_Id
+            scope         = "https://graph.microsoft.com/.default"
+            client_secret = $App_secret
+            grant_type    = "client_credentials"
+        }
+    } Catch {
+        $ErrorDescription = "Error building body for API token."
+        Write-Output "$($ErrorDescription)"
+        Write-Error -Message "$(get-date -f o) $($ErrorDescription)" -Category NotSpecified
+        Throw "$($ErrorDescription) `r`n$_"
+    }
+    # Invoke Graph API to get Token for future requests
+    Write-Verbose -Message "INFO: Attempting to get token."
+    try {
+        $tokenRequest = (Invoke-WebRequest -Method Post -ContentType "application/x-www-form-urlencoded" -Body $body -UseBasicParsing -Uri "https://login.microsoftonline.com/$TenantDomain/oauth2/v2.0/token" -ErrorAction Stop) | Convertfrom-Json
+    } catch {
+        $ErrorDescription = "Error retrieving token for graphAPI."
+        Write-Output "$($ErrorDescription)"
+        Write-Error -Message "$(get-date -f o) $($ErrorDescription)" -Category NotSpecified
+        Throw "$($ErrorDescription) `r`n$_"
+    }
+    Write-Verbose -Message "INFO: Building Autheader"
+    Try {
+        $AuthHeader = @{
+            "Content-Type" = "application/json"
+            "Authorization" = "Bearer $($tokenRequest.access_token)"
+        }
+    } Catch {
+        $ErrorDescription = "Error building AutHeader for API-CALS."
+        Write-Output "$($ErrorDescription)"
+        Write-Error -Message "$(get-date -f o) $($ErrorDescription)" -Category NotSpecified
+        Throw "$($ErrorDescription) `r`n$_"
+    }
+    # Return Autheader to be used
+    Write-Verbose -Message "INFO: Returning Autheader"
+    Return $AuthHeader
+}
+Write-Verbose -Message "INFO: Finished importing Function_Authentication."
+
+
+
+$AuthHeader = Get-GraphAuthToken -App_Id "bff9cc68-f03f-468f-ab04-bfaa1185b985" -App_secret "Alv8Q~iS7gbD-uQCY8FtniABN1CI_L51tapvvaIh" -TenantDomain "Ateaumea.onmicrosoft.com"
+
+((($a[0].Content) | ConvertFrom-Json).value) | foreach { [Array]$objects += [PSCustomobject]@{displayName = $_.displayName; Assignments = $_.Assignmant} }
+
+$A = Invoke-WebRequest -Method GET -Uri "https://graph.microsoft.com/beta/deviceAppManagement/mobileApps" -UseBasicParsing -Headers $AuthHeader 
+
+$A = Invoke-WebRequest -Method GET -Uri "https://graph.microsoft.com/beta/deviceAppManagement/mobileApps?`$expand=assignments" -Headers $AuthHeader 
+
+
+
+
+
+
+$AllApps = Get-DeviceAppManagement_MobileApps

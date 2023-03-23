@@ -1,0 +1,20 @@
+
+$HostsFile = "$($env:SystemRoot)\system32\drivers\etc\hosts"
+If ((Get-Content -Path "$HostsFile") | where-object { $_ -like "*fileserver01.aadds.balticgruppen.se" }) { exit(0) } else {exit(1) }
+
+If false add fileserver01 line in hosts file.
+
+if lost, input
+
+
+$HostsFile = "$($env:SystemRoot)\system32\drivers\etc\hosts"
+$ServerAddress = "10.240.0.11 fileserver01.aadds.balticgruppen.se"
+
+If ((Get-Content -Path "$HostsFile") | where-object { $_ -eq $ServerAddress}) { 
+
+    Write-Output "$ServerAddress line exists in file"
+    
+} else {
+    Add-Content -Path "$HostsFile" -Value "$ServerAddress"
+}
+If ((Get-Content -Path "$HostsFile") | where-object { $_ -eq $ServerAddress}) { exit(0) } else { exit(1) }

@@ -1,0 +1,29 @@
+# upload a file to the default account (inferred) access tier
+$Blob1HT = @{
+  File             = 'C:\Users\Joakim Ferdinansson\Pictures\WPW_Miami_2022_2.png'
+  Container        = $ContainerName
+  Blob             = "F1istheshitlol/WPW_Miami_2022_2.png"
+  Context          = $ctx
+  StandardBlobTier = 'Hot'
+}
+Set-AzStorageBlobContent @Blob1HT
+  
+ # upload another file to the Cool access tier
+ $Blob2HT = @{
+  File             = 'D:\Images\Image002.jpg'
+  Container        = $ContainerName
+  Blob             = 'Image002.png'
+  Context          = $Context
+  StandardBlobTier = 'Cool'
+ }
+ Set-AzStorageBlobContent @Blob2HT
+  
+# upload a file to a folder to the Archive access tier
+$Blob3HT = @{
+  File             = 'D:\Images\FolderName\Image003.jpg'
+  Container        = $ContainerName
+  Blob             = 'FolderName/Image003.jpg'
+  Context          = $Context
+  StandardBlobTier = 'Archive'
+}
+Set-AzStorageBlobContent @Blob3HT
