@@ -15,3 +15,8 @@ Enable-OrganizationCustomization
 New-ManagementRoleAssignment -Role "ApplicationImpersonation" -User "<Your admin accounts UPN>"
 
 # Make sure to replace "admin@domain.com" in the PowerShell command above with the admin account being used
+
+
+#Remove ApplicationImpersonation
+Get-ManagementRoleAssignment -Role ApplicationImpersonation
+$role = Get-ManagementRoleAssignment -role applicationimpersonation | Remove-ManagementRoleAssignment
