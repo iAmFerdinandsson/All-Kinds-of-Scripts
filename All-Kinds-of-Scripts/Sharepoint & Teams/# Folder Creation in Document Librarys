@@ -1,0 +1,57 @@
+$csvPath = "C:\Temp\SveinungSPfolders.csv"
+
+# Load SharePoint CSOM Assemblies
+Add-Type -Path "C:\Program Files\Common Files\Microsoft Shared\Web Server Extensions\16\ISAPI\Microsoft.SharePoint.Client.dll"
+Add-Type -Path "C:\Program Files\Common Files\Microsoft Shared\Web Server Extensions\16\ISAPI\Microsoft.SharePoint.Client.Runtime.dll"
+
+# Function to create library and folders
+Function Create-FoldersFromCSV {
+    param (
+        [Parameter(Mandatory = $true)][string]$CSVPath,
+        [Parameter(Mandatory = $true)][System.Management.Automation.PSCredential]$Credential
+    )
+
+    $csvData = Import-Csv -Path $CSVPath
+
+    foreach ($item in $csvData) {
+        $siteURL = $item.SiteURL
+        $libraryName = $item.LibraryName
+        $folderPath = $item.FolderPath
+
+        try {
+            # Setup the context
+            $ctx = New-Object Microsoft.SharePoint.Client.ClientContext($siteURL)
+            $ctx.Credentials = $Credential
+
+            # Get the web and root folder
+            $web = $ctx.Web
+            $ctx.Load($web)
+            $ctx.ExecuteQuery()
+
+            $rootFolder = $web.GetFolderByServerRelativeUrl($libraryName)
+            $ctx.Load($rootFolder)
+            $ctx.ExecuteQuery()
+
+            # Create subfolders
+            $subfolders = $folderPath.Split("/")
+            foreach ($folderName in $subfolders) {
+                $folder = $rootFolder.Folders.Add($folderName)
+                $ctx.Load($folder)
+                $ctx.ExecuteQuery()
+
+                $rootFolder = $folder
+            }
+
+            Write-Host "Folder '$folderPath' created in library '$libraryName' in site '$siteURL'" -ForegroundColor Green
+        }
+        catch {
+            Write-Host "Error creating folder '$folderPath' in library '$libraryName' in site '$siteURL': $($_.Exception.Message)" -ForegroundColor Red
+        }
+    }
+}
+
+# Get credentials from user
+$credentials = Get-Credential
+
+# Call the function to create folders from the CSV file
+Create-FoldersFromCSV -CSVPath $csvPath -Credential $credentials
