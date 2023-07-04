@@ -4,11 +4,17 @@
 Install-Module AzureADPreview
 Import-Module AzureADPreview
 
+param (
+    [Parameter(Mandatory=$true)]
+    [string]$TenantID
+)
+
 # Connection to the tenant 
-Connect-AzureAD -TenantId "d0c997f4-3706-4b20-8b6f-f1aa6eb940ac"
+Connect-AzureAD -TenantId $TenantID
 
 # Variable to the CSV Path
-$CSVPath = "C:\Temp\SKHSecurityGroups.csv"
+Get-ChildItem $PSScriptRoot
+$CSVPath = "$PSScriptRoot\PSSecGroups.csv"
 
 # Variable to the import of the CSV file
 $Groups = Import-Csv -Path $CSVPath
