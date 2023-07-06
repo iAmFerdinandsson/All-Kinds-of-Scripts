@@ -1,13 +1,19 @@
 # Bulk create Security Groups
 
 # Pre-requisite to run the script
-Install-Module AzureADPreview
+Install-Module AzureADPreview -
 Import-Module AzureADPreview
 
 param (
     [Parameter(Mandatory=$true)]
     [string]$TenantID
 )
+
+# Install and import the required module
+if (-not (Get-Module -Name AzureADPreview -ListAvailable)){
+    Install-Module -Name AzureADPreview -Force
+}
+Import-Module -Name AzureADPreview -Force
 
 # Connection to the tenant 
 Connect-AzureAD -TenantId $TenantID
