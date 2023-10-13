@@ -1,4 +1,5 @@
-﻿$Mailboxes = Get-Mailbox -RecipientTypeDetails UserMailbox -ResultSize Unlimited  
+﻿#Test
+$Mailboxes = Get-Mailbox -RecipientTypeDetails UserMailbox -ResultSize Unlimited  
 $data = @()  
 foreach ($Mailbox in $mailboxes){  
     $temp = Get-Mailbox $Mailbox.PrimarySmtpAddress | select DisplayName,WindowsEmailAddress,TotalItemSize,LastLogonTime  

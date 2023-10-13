@@ -1,4 +1,5 @@
-﻿$csvPath = "C:\Temp\SveinungSPFolders.csv"
+﻿#Test
+$csvPath = "C:\Temp\SveinungSPFolders.csv"
 
 # Install the SharePoint PnP PowerShell module if not already installed
 if (-not (Get-Module -ListAvailable -Name SharePointPnPPowerShellOnline)) {

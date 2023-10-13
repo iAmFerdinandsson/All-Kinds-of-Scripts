@@ -1,3 +1,4 @@
+#Test
 # Disable_Sharepoint-Shortcut-to-Onedrive.ps1
 
 param (

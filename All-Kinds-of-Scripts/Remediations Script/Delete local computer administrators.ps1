@@ -1,4 +1,5 @@
-﻿#Unique identifier for Users
+﻿#Test
+#Unique identifier for Users
 $MemberSID = "S-1-\d{1}-\d{2}-\d{10}-\d{10}-\d{10}-\d{4}"
 #Local Administrator group SID "S-1-5-32-544"
 $LocalAdminGroup = (Get-LocalGroupMember -SID "S-1-5-32-544").sid.value -match $MemberSID

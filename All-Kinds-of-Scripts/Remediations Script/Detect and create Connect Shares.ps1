@@ -1,3 +1,4 @@
+#Test
 $ShortcutName = "Connect Shares"
 $desiredBootScriptFolder = Join-Path $env:ProgramData -ChildPath $scriptName
 $desiredBootScriptPath = Join-Path $desiredBootScriptFolder -ChildPath "$scriptName.ps1"

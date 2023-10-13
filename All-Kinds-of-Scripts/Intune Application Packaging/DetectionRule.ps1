@@ -1,4 +1,5 @@
-﻿$ApplicationName = "UninstallString DisplayName"
+﻿#Test
+$ApplicationName = "UninstallString DisplayName"
 $ApplicationVersion = "UninstallString DisplayVersion"
 
 function Get-ApplicationInstalled {

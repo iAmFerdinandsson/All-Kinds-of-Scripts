@@ -1,4 +1,5 @@
 # Connect to AzureAD
+#Test
 Connect-AzureAD
 
 # Get all users and select properties to export

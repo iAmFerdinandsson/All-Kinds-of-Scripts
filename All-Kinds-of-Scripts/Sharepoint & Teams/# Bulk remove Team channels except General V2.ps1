@@ -1,4 +1,5 @@
-﻿# Install and import the required module
+﻿#Test
+# Install and import the required module
 if (-not (Get-Module -Name MicrosoftTeams -ListAvailable)) {
     Install-Module -Name MicrosoftTeams -Force
 }

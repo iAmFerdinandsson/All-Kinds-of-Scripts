@@ -1,4 +1,5 @@
-﻿$Channels = Import-CSV "C:/Temp/SKHTeamsChannels.csv"
+﻿#Test
+$Channels = Import-CSV "C:/Temp/SKHTeamsChannels.csv"
 $GroupID = "0178afdb-c7cc-4d3f-becb-2918e35a0a46"
 
 foreach ($Channel in $Channels) {

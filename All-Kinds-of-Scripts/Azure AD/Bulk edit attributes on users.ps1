@@ -2,7 +2,7 @@
 # Changes the attributes of the Azure AD users and 
 # Doublechecks that the users got the new attributes
 # Catches and informs if something gotten wrong
-
+#Test
 # Connect to AzureAD
 Connect-AzureAD
 
