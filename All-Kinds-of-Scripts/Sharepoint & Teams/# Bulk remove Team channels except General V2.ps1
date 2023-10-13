@@ -43,8 +43,8 @@ $listBox.SelectionMode = 'MultiExtended'
 
 # Connect to Microsoft Teams
 try {
-    #$tenantId = Read-Host -Prompt 'Enter the Tenant ID'
-    Connect-MicrosoftTeams
+    $tenantId = Read-Host -Prompt 'Enter the Tenant ID'
+    Connect-MicrosoftTeams -TenantId $tenantId -Verbose
 
     (Get-Team).displayname
     $TeamDisplayname = Read-Host -Prompt 'Enter the displayname for the Team where the channels are stored'

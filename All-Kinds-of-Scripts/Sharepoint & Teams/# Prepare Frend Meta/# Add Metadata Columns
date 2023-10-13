@@ -1,0 +1,12 @@
+#Config Variables
+$SiteURL = "https://Crescent.sharepoint.com/sites/marketing"
+$ListName= "Projects"
+ 
+#Connect to PnP Online
+Connect-PnPOnline -Url $SiteURL -Credentials (Get-Credential)
+ 
+#Define XML Schema for Text Field
+$FieldXML= "<Field Type='Text' Name='ProjectCode' ID='$([GUID]::NewGuid())' DisplayName='Project Code' Required ='FALSE' EnforceUniqueValues = 'TRUE' Indexed='TRUE'></Field>"
+ 
+#Add Text Field to list from XML
+Add-PnPFieldFromXml -FieldXml $FieldXML -List $ListName

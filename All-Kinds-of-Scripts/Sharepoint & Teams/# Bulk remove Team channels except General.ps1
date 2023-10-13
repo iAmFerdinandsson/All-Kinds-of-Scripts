@@ -18,4 +18,4 @@ foreach ($Channel in $Channels) {
         Write-Host "Channel $($Channel.displayName) not removed or encountered an error"
         $Return = 0
     }
-}Contoso marketing
+}

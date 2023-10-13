@@ -1,9 +1,6 @@
 # Bulk create Security Groups
 
-# Pre-requisite to run the script
-Install-Module AzureADPreview -
-Import-Module AzureADPreview
-
+# Params
 param (
     [Parameter(Mandatory=$true)]
     [string]$TenantID
