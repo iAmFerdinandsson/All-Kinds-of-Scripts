@@ -1,0 +1,6 @@
+$SID = 'S-1-12-1-3207552849-1337662576-2937877432-821201479'
+
+([guid][byte[]]([int[]]$sid.Replace('S-1-12-1-', '').Split('-') | %{ [System.BitConverter]::GetBytes($_) })).Guid
+
+
+Get-LocalGroupMember -Group "Administrators" | Where-Object {$_.PrincipalSource -eq "Local"} 
